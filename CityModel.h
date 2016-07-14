@@ -27,8 +27,8 @@
  */
 
 +(NSArray*)getAllprovincesAndCities;
-+(NSArray*)getAllCitiesBySorted;
-
++(NSDictionary*)getAllCitiesBySorted;
++(NSArray*)getallCities;
 @end
 
 /**

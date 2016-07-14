@@ -8,21 +8,52 @@
 
 #import "ViewModel.h"
 
+@interface ViewModel()
+
+@property (nonatomic,strong)NSDictionary* dic;
+
+@end
+
 @implementation ViewModel
 
+-(NSArray *)allCitiesName{
+    NSArray* arr = [CityModel getallCities];
+    NSMutableArray* names = [NSMutableArray new];
+    for (SubCityModel* model in arr) {
+        [names addObject:model.cityName];
+    }
+    if (_allCitiesName == nil) {
+        _allCitiesName = [NSArray arrayWithArray:names];
+    }
+    return _allCitiesName;
+}
 
+-(NSDictionary *)dic{
+    if (_dic == nil) {
+        _dic = [CityModel getAllCitiesBySorted];
+    }
+    return _dic;
+}
 -(NSArray *)dataArr{
     if (_dataArr == nil) {
-        _dataArr = [CityModel getAllCitiesBySorted];
+        _dataArr = self.dic[@"sortedCity"];
     }
     return _dataArr;
 }
--(NSInteger)sectionNum{
-    return self.dataArr.count;
+-(NSArray *)index{
+    if (_index == nil) {
+        _index = [NSArray arrayWithArray:self.dic[@"index"]];
+    }
+    return _index;
 }
 
--(CityModel*)modelForSection:(NSInteger)section{
-    return  self.dataArr[section];
+-(NSInteger)sectionNum{
+    return self.index.count;
+}
+
+-(SubCityModel*)modelForRowInSection:(NSInteger)section row:(NSInteger)row{
+   SubCityModel* model = self.dataArr[section][row];
+    return model;
 }
 
 /**
@@ -30,7 +61,8 @@
  */
 -(NSInteger)rowNumForSection:(NSInteger)section{
 
-    return [self modelForSection:section].subCities.count;
+    NSArray* arr = [NSArray arrayWithArray:self.dataArr[section]];
+    return arr.count;
 }
 
 /**
@@ -39,8 +71,8 @@
 
  @return 分区头的标题
  */
--(NSString*)titleForSection:(NSInteger)section{
-    return [self modelForSection:section].provinceName;
+-(NSString*)indexForSection:(NSInteger)section{
+    return self.index[section];
 }
 /**
 
@@ -50,14 +82,11 @@
  */
 
 -(NSString*)titleForRowInSection:(NSInteger)section  row:(NSInteger)row{
-    SubCityModel* model = [self modelForSection:section].subCities[row];
-    return model.cityName;
+
+    return [self modelForRowInSection:section row:row].cityName;
 }
 
 
--(NSArray*)models{
-    return [CityModel getAllCitiesBySorted];
-}
 
 -(NSString *)titleForrow:(NSInteger)row{
     SubCityModel* model = self.dataArr[row];

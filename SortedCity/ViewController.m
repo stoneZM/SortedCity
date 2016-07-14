@@ -62,25 +62,25 @@
 #pragma mark UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     //    return self.viewModel.sectionNum;
-    return 1;
+    return self.viewModel.sectionNum;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    //    return [self.viewModel rowNumForSection:section];
-    return [self.viewModel rowNum];
+        return [self.viewModel rowNumForSection:section];
+
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    //    cell.textLabel.text = [self.viewModel titleForRowInSection:indexPath.section row:indexPath.row];
-    cell.textLabel.text = [self.viewModel titleForrow:indexPath.row];
+        cell.textLabel.text = [self.viewModel titleForRowInSection:indexPath.section row:indexPath.row];
+
     return cell;
 }
-//-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
-////    return [self.viewModel titleForSection:section];
-//}
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    return [self.viewModel indexForSection:section];
+}
 
 #pragma mark UITabelViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -97,23 +97,19 @@
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
     //从委托方中获取用户在文本框中的输入内容
-    //    NSString* searchText = searchController.searchBar.text;
+        NSString* searchText = searchController.searchBar.text;
 
     //到self.allProducts中逐一比对
-    //    NSMutableArray* resultArray = [[NSMutableArray alloc]init];
-    //    for (Product* p in self.allProducts) {
-    //        NSRange range = [p.name rangeOfString:searchText];
-    //        //如果名称匹配切类别相同，则将此产品记录到数组中
-    //        if (range.length > 0&& p.type == selectedIndex) {
-    //            [resultArray addObject:p];
-    //        }
-    //    }
+        NSMutableArray* resultArray = [[NSMutableArray alloc]init];
+        for (NSString* str in self.viewModel.allCitiesName) {
+    //如果名称匹配切类别相同，则将此name记录到数组中
+            if ([searchText isEqualToString:str]) {
+                [resultArray addObject:str];
+            }
+        }
     //将要展示的结果给负责展示数据的VC传过去
-    //    self.showResultVC.resultArray = resultArray;
+    self.showResultVC.resultArray = resultArray;
     [self.showResultVC.tableView reloadData];
-
-    //为了点击serchBar上的类别按钮时，也能有响应，所以设置searchBar的代理
-    self.secrchController.searchBar.delegate = self;
 
 }
 

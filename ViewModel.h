@@ -17,6 +17,10 @@
 @property (nonatomic,assign)NSInteger sectionNum;
 
 @property (nonatomic,strong)NSArray* dataArr;
+
+@property (nonatomic,strong)NSArray* index;
+
+@property (nonatomic,strong)NSArray* allCitiesName;
 /**
  根据分区确定有几个城市
  */
@@ -27,7 +31,8 @@
 
  @return 分区头的标题
  */
--(NSString*)titleForSection:(NSInteger)section;
+-(NSString*)indexForSection:(NSInteger)section;
+
 /**
 
  @param section 分区数

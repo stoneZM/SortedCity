@@ -8,7 +8,7 @@
 
 #import "CityModel.h"
 
-
+static NSInteger count = 0;
 @implementation CityModel
 
 /**
@@ -50,50 +50,46 @@
     return allCities;
 
 }
+-(NSArray *)index{
+    if (_index == nil) {
+        _index = [NSArray new];
+    }
+    return _index;
+}
 /**
  对所有子城市进行分类排序
  */
-+(NSArray*)getAllCitiesBySorted{
++(NSDictionary*)getAllCitiesBySorted{
 
     NSMutableArray* allCity = [[self getallCities] mutableCopy];
-    //    NSMutableArray *array = [[NSMutableArray alloc] init];
-    //
-    //    for(int i='A';i<='Z';i++)
-    //    {
-    //        NSMutableArray *rulesArray = [[NSMutableArray alloc] init];
-    //
-    //        NSString *str1=[NSString stringWithFormat:@"%c",i];
-    //        for(int j=0;j < allCity.count;j++)
-    //        {
-    //            SubCityModel* model = allCity[j];
-    //            if([[self transformCharacter:model.cityName] isEqualToString:str1])
-    //            {
-    //                [rulesArray addObject:model];
-    //                [allCity removeObject:model];
-    //                j--;
-    //
-    //            }
-    //        }
-    //        if (rulesArray.count != 0) {
-    //            [array addObject:rulesArray];
-    //        }
-    //    }
-    //进行排序操作
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    NSMutableArray* indexArr = [[NSMutableArray alloc]init];
+        for(int i='A';i<='Z';i++)
+        {
+            NSMutableArray *rulesArray = [[NSMutableArray alloc] init];
+    
+            NSString *str1=[NSString stringWithFormat:@"%c",i];
+            for(int j=0; j < allCity.count; j++)
+            {
+                SubCityModel* model = allCity[j];
+                if([[self transformCharacter:model.cityName] isEqualToString:str1])
+                {
+                    [rulesArray addObject:model];
+                    [allCity removeObject:model];
+                    j--;
+    
+                }else{
 
-    NSArray* sorted =  [allCity sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        SubCityModel* model1 = obj1;
-        SubCityModel* model2 = obj2;
-        NSString* ch1 = [self transformCharacter:model1.cityName];
-        NSString* ch2 = [self transformCharacter:model2.cityName];
-
-        if (ch1 > ch2) {
-            return NSOrderedDescending;
-        }else if(ch1 < ch2)return NSOrderedAscending;
-        else return NSOrderedSame;
-    }];
-    NSLog(@"%ld",sorted.count);
-    return sorted;
-
+                }
+            }
+            if (rulesArray.count != 0) {
+                [array addObject:rulesArray];
+                [indexArr addObject:str1];
+                NSLog(@"%@",str1);
+            }
+        }
+    NSDictionary* dic = @{@"sortedCity":array,@"index":indexArr};
+    return dic;
 }
 
 /**
@@ -152,6 +148,7 @@
 
 
 @implementation SubCityModel
+
 
 +(NSArray*)getSubCitiesWithArray:(NSArray*)array{
     NSMutableArray* subCities = [NSMutableArray new];
